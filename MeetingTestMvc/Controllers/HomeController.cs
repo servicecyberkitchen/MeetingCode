@@ -5,25 +5,43 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MeetingTestMvc.Models;
+using System.Net.Http;
+using MeetingTestApi.Models;
+using Newtonsoft.Json;
 
 namespace MeetingTestMvc.Controllers
 {
+    [Route("")]
+    [Route("[controller]")]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private HttpClient _client;
+        public HomeController()
+        {
+            _client = new HttpClient()
+            {
+                BaseAddress = new Uri("http://localhost:2019")
+            };
+        }
+
+        [Route("")]
+        [Route("[action]")]
+        public ActionResult Index()
+        {
+            return View("Index");
+        }
+
+        [Route("[action]")]
+        public ActionResult ShowInfo()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        [Route("[action]")]
+        public ActionResult ShowReservationPage()
         {
-            return View();
+            return View("AddReservation");
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

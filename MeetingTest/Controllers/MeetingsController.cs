@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
 using MeetingTestApi.Entities;
-using Microsoft.AspNetCore.Http;
+using MeetingTestMvc.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeetingTestApi.Controllers
 {
@@ -12,10 +13,34 @@ namespace MeetingTestApi.Controllers
     [ApiController]
     public class MeetingsController : ControllerBase
     {
-        AppointmentsContext db = new AppointmentsContext();
+        AppointmentsContext db;
+        public MeetingsController()
+        {
+            db = new AppointmentsContext();
+        }
 
-        [HttpGet("ListAllMeetings")]
-        public IActionResult ListAllMeetings()
+        [Route("Meetings")]
+        public IActionResult ListMeetings()
+        {
+            var listMeetings =
+                from a in db.TblMeetings
+                join b in db.TblDays
+                    on a.IdDay equals b.IdDay
+                join c in db.TblTimeslots
+                    on a.IdTimeslot equals c.IdTimeslot
+                select new FinalMeeting
+                {
+                    IdMeeting = a.IdMeeting,
+                    Day = b.Day,
+                    StartTime = c.StartTime,
+                    EndTime = c.EndTime
+                };
+            return Ok(listMeetings);
+        }
+
+        [Route("MeetingsTable")]
+        // GET Meetings/Meetings
+        public IActionResult ListMeetingsID()
         {
             var listMeetings = db.TblMeetings
                 .Select(c => c)
@@ -23,7 +48,7 @@ namespace MeetingTestApi.Controllers
             return Ok(listMeetings);
         }
 
-        [HttpGet("AddMeeting")]
+        [Route("AddMeeting")]
         public IActionResult AddMeeting()
         {
             TblMeetings newMeeting = new TblMeetings()
@@ -35,8 +60,13 @@ namespace MeetingTestApi.Controllers
             db.TblMeetings.Add(newMeeting);
             db.SaveChanges();
 
-            return ListAllMeetings();
+            return ListMeetings();
         }
 
+
+        #region Testing Purposes
+
+
+        #endregion
     }
 }

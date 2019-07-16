@@ -19,8 +19,9 @@ namespace MeetingTestApi.Controllers
             db = new AppointmentsContext();
         }
 
-        [HttpGet("ListAllDays")]
-        public ActionResult<IEnumerable<ModelDay>> ListAllDays()
+        [Route("Days")]
+        // GET Days/Days
+        public ActionResult<IEnumerable<ModelDay>> ListDays()
         {
             try
             {
@@ -43,13 +44,14 @@ namespace MeetingTestApi.Controllers
             }
         }
 
-        [HttpGet("ListFirstDay")]
-        public IActionResult ListFirstDay()
+        [Route("Days/{id}")]
+        // GET Days/Days/1
+        public IActionResult getDayById(int id)
         {
-            var listFirstDay = db.TblDays
-                .Select(c => c)
-                .FirstOrDefault();
-            return Ok(listFirstDay);
+            var dayById = db.TblDays
+                .Where(c => c.IdDay == id)
+                .Select(c => c);            
+            return Ok(dayById);
         }
     }
 }

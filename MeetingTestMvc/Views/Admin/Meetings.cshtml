@@ -1,0 +1,18 @@
+﻿
+
+@{
+    ViewData["Title"] = "Meetings";
+}
+
+@foreach (var Meeting in ViewBag.meetings)
+{
+    <div class="row">
+        <div class=""> @Meeting.IdMeeting || @Meeting.Day || @Meeting.StartTime || @Meeting.EndTime </div>
+    </div>
+}
+<div class="row">
+    <a href="addMeeting"> Click here to add a dummy meeting</a>
+</div>
+
+
+

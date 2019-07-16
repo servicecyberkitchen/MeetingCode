@@ -12,10 +12,15 @@ namespace MeetingTestApi.Controllers
     [ApiController]
     public class TimeslotsController : ControllerBase
     {
-        AppointmentsContext db = new AppointmentsContext();
+        AppointmentsContext db;
+        public TimeslotsController()
+        {
+            db = new AppointmentsContext();
+        }
 
-        [HttpGet("ListAllTimeslots")]
-        public IActionResult ListAllTimeslots()
+        [Route("Timeslots")]
+        // GET Days/Days
+        public IActionResult ListTimeslots()
         {
             var listTimeslots = db.TblTimeslots
                 .Select(c => c)
@@ -23,13 +28,14 @@ namespace MeetingTestApi.Controllers
             return Ok(listTimeslots);
         }
 
-        [HttpGet("ListFirstTimeslot")]
-        public IActionResult ListFirstTimeslot()
+        [Route("Timeslots/{id}")]
+        // GET Timeslots/Timeslots/1
+        public IActionResult getTimeslotById(int id)
         {
-            var listFirstTimeslot = db.TblTimeslots
-                .Select(c => c)
-                .FirstOrDefault();
-            return Ok(listFirstTimeslot);
+            var timeslotById = db.TblTimeslots
+                .Where(c => c.IdTimeslot == id)
+                .Select(c => c);
+            return Ok(timeslotById);
         }
     }
 }
