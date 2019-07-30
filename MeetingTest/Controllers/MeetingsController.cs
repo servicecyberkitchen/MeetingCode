@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using MeetingTestApi.Entities;
-using MeetingTestMvc.Models;
+using MeetingTestApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
+using System.Diagnostics;
 
 namespace MeetingTestApi.Controllers
 {
@@ -20,6 +20,7 @@ namespace MeetingTestApi.Controllers
         }
 
         [Route("Meetings")]
+        // GET Meetings/Meetings
         public IActionResult ListMeetings()
         {
             var listMeetings =
@@ -28,7 +29,7 @@ namespace MeetingTestApi.Controllers
                     on a.IdDay equals b.IdDay
                 join c in db.TblTimeslots
                     on a.IdTimeslot equals c.IdTimeslot
-                select new FinalMeeting
+                select new ModelMeetingFinal
                 {
                     IdMeeting = a.IdMeeting,
                     Day = b.Day,
@@ -39,7 +40,7 @@ namespace MeetingTestApi.Controllers
         }
 
         [Route("MeetingsTable")]
-        // GET Meetings/Meetings
+        // GET Meetings/MeetingsTable
         public IActionResult ListMeetingsID()
         {
             var listMeetings = db.TblMeetings
@@ -48,25 +49,72 @@ namespace MeetingTestApi.Controllers
             return Ok(listMeetings);
         }
 
-        [Route("AddMeeting")]
-        public IActionResult AddMeeting()
+        //[Route("Meetings/{id}")]
+        [HttpGet("{id}", Name = "GetMeeting")]
+        // GET Meetings/Meetings/1
+        public IActionResult getMeetingById(int id)
         {
-            TblMeetings newMeeting = new TblMeetings()
-            {
-                IdDay = 1,
-                IdTimeslot = 2
-            };
-
-            db.TblMeetings.Add(newMeeting);
-            db.SaveChanges();
-
-            return ListMeetings();
+            var meetingById = db.TblMeetings
+                .Where(c => c.IdMeeting == id)
+                  .Select(d => new ModelMeeting
+                  {
+                      IdMeeting = d.IdMeeting,
+                      IdDay = d.IdDay,
+                     IdTimeslot = d.IdTimeslot
+                  }).ToList();
+            return Ok(meetingById);
         }
+
+        #region POST methods (creating new resources)
+        [HttpPost]
+        [Route("AddMeeting")]
+        public IActionResult AddMeeting([FromBody] ModelMeeting content)
+        {    
+            TblMeetings meet = new TblMeetings
+            {
+               IdDay = content.IdDay,
+               IdTimeslot = content.IdTimeslot
+             };
+
+             db.TblMeetings.Add(meet);
+             db.SaveChanges();
+            return Created(Url.Link("GetMeeting", new { id = meet.IdMeeting }), meet);
+        }
+        #endregion
+
+
+
+
+
+
 
 
         #region Testing Purposes
+        [HttpPost]
+        [Route("addSimpleString")]
+        public string JsonStringBody([FromBody] string content)
+        {
+            // Looks for a string in json format
+            Debug.WriteLine(content);
+            return content;
+        }
 
+        // public HttpResponseMessage Add(ModelMeeting meeting)
+        // {
+        //  TblMeetings meet = new TblMeetings
+        //     {
+        //  IdMeeting = meeting.IdMeeting,
+        //  IdDay = meeting.IdDay,
+        //  IdTimeslot = meeting.IdTimeslot
+        //  };
 
+        //  db.TblMeetings.Add(meet);
+        // db.SaveChanges();
+
+        // var response = Request.CreateResponse<HttpStatusCode.Created, Item>
+
+        // return Response.Headers.Location();
         #endregion
     }
+
 }

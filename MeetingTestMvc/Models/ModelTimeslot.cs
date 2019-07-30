@@ -10,7 +10,5 @@ namespace MeetingTestApi.Models
         public int IdTimeslot { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
-
-        public virtual ICollection<ModelTimeslot> TblMeetings { get; set; }
     }
 }

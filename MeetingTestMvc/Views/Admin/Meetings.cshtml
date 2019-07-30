@@ -1,14 +1,52 @@
-﻿
-
-@{
+﻿@{
     ViewData["Title"] = "Meetings";
 }
 
+<div class="row">
+    <div class="col-4">
+        <p> Datum </p>
+    </div>
+    <div class="col-4">
+        <p> Tijdslot </p>
+    </div>
+    <div class="col-2">
+        <p> Naam verantwoordelijke </p>
+    </div>
+    <div class="col-2">
+        <p> Status </p>
+    </div>
+</div>
+
 @foreach (var Meeting in ViewBag.meetings)
 {
-    <div class="row">
-        <div class=""> @Meeting.IdMeeting || @Meeting.Day || @Meeting.StartTime || @Meeting.EndTime </div>
+<div class="row">
+
+    <div class="col-4">
+        <p> @Meeting.IdMeeting  ||  @Meeting.Day  </p>
     </div>
+
+    <div class="col-4">
+        <p> @Meeting.StartTime || @Meeting.EndTime </p>
+    </div>
+
+    <div class="col-2">
+        <a href="Meetings/DeleteMeeting/" + @Meeting.IdMeeting> John Doe</a>
+    </div>
+
+    <div class="col-1">
+        <span class="glyphicon glyphicon-remove"></span>
+        <a href="Meetings/DeleteMeeting/" + @Meeting.IdMeeting>
+                Delete 
+        </a>
+    </div>
+
+    <div class="col-1">
+        <span class="glyphicon glyphicon-envelope"></span>
+        <a href="Meetings/DeleteMeeting/" + @Meeting.IdMeeting>
+            Mail
+        </a>
+    </div>
+</div>
 }
 <div class="row">
     <a href="addMeeting"> Click here to add a dummy meeting</a>

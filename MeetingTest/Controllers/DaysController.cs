@@ -50,7 +50,11 @@ namespace MeetingTestApi.Controllers
         {
             var dayById = db.TblDays
                 .Where(c => c.IdDay == id)
-                .Select(c => c);            
+                  .Select(d => new ModelDay
+                  {
+                      IdDay = d.IdDay,
+                      Day = d.Day
+                  }).ToList();
             return Ok(dayById);
         }
     }

@@ -9,7 +9,5 @@ namespace MeetingTestApi.Models
     {
         public int IdDay { get; set; }
         public DateTime Day { get; set; }
-
-        public virtual ICollection<ModelMeeting> TblMeetings { get; set; }
     }
 }

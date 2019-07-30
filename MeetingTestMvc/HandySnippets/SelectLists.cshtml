@@ -1,0 +1,23 @@
+﻿
+
+@Html.DropDownList("Days", new SelectList(ViewBag.days, "IdDay", "Day"));
+
+<h2>Choose a timeslot</h2>
+@Html.DropDownList("Timeslots", new SelectList(ViewBag.timeslots, "IdTimeslot", "StartTime"))
+
+<select name="Days">
+    <option value="">Select a number</option>
+    @foreach (var Day in ViewBag.days)
+    {
+        <option value="@Day.IdDay">@Day.Day</option>
+    }
+</select>
+
+
+<select name="Timeslots">
+    <option value="">Select a number</option>
+    @foreach (var Timeslot in ViewBag.timeslots)
+    {
+        <option value="@Timeslot.IdTimeslot"> @Timeslot.StartTime - @Timeslot.EndTime</option>
+    }
+</select>

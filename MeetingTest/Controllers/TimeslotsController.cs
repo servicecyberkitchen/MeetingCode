@@ -19,7 +19,7 @@ namespace MeetingTestApi.Controllers
         }
 
         [Route("Timeslots")]
-        // GET Days/Days
+        // GET Timeslots/Timeslots
         public IActionResult ListTimeslots()
         {
             var listTimeslots = db.TblTimeslots
